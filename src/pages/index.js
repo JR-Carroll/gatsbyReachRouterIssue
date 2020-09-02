@@ -1,22 +1,40 @@
 import React from "react"
-import { Link } from "gatsby"
+import { Router, Link, Location } from "@reach/router"
+// import { TransitionGroup, CSSTransition } from "react-transition-group"
+// import "./main.css"
 
-import Layout from "../components/layout"
-import Image from "../components/image"
-import SEO from "../components/seo"
+const App = () => (
+  <div className="app">
+    <nav className="nav">
+      <Link to="/">Page 1</Link> <Link to="page/2">Page 2</Link>
+      {` `}
+      <Link to="page/3">Page 3</Link> <Link to="page/4">Page 4</Link>
+    </nav>
 
-const IndexPage = () => (
-  <Layout>
-    <SEO title="Home" />
-    <h1>Hi people</h1>
-    <p>Welcome to your new Gatsby site.</p>
-    <p>Now go build something great.</p>
-    <div style={{ maxWidth: `300px`, marginBottom: `1.45rem` }}>
-      <Image />
-    </div>
-    <Link to="/page-2/">Go to page 2</Link> <br />
-    <Link to="/using-typescript/">Go to "Using TypeScript"</Link>
-  </Layout>
+    <FadeTransitionRouter>
+      <Page path="/" page="1" />
+      <Page path="page/:page" />
+    </FadeTransitionRouter>
+  </div>
 )
 
-export default IndexPage
+const FadeTransitionRouter = props => (
+  <Location>
+    {({ location }) => (
+          <Router location={location} className="router">
+            {props.children}
+          </Router>
+    )}
+  </Location>
+)
+
+const Page = props => (
+  <div
+    className="page"
+    style={{ background: `hsl(${props.page * 75}, 60%, 60%)` }}
+  >
+    {props.page}
+  </div>
+)
+
+export default App
